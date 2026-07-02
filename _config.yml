@@ -24,9 +24,9 @@ repository               : ""
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Postdoctoral researcher"
+  name             : "Carlotta Micaela Jarach"
   pronouns         : # example: "she/her"  
-  bio              : "Epidemiologist trying to understand what shapes our health as we get older, and why the experience is so unequal. I work at the intersection of research and health policy, with the conviction that good science should inform better decisions."
+  bio              : "Epidemiologist trying to understand what shapes our health as we get older"
   location         : "New York, USA"
   employer         : "New York University Langone Health"
   uri              : # URL
