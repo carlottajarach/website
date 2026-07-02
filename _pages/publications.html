@@ -5,32 +5,70 @@ permalink: /publications/
 author_profile: true
 ---
 
-{% if site.author.googlescholar %}
-  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
-{% endif %}
+<div id="orcid-works" style="margin-top:1em;">
+  <p id="orcid-status" style="color:#777;">Loading publications from ORCID…</p>
+</div>
 
-{% include base_path %}
+<script>
+(function () {
+  var ORCID = "0000-0002-9963-1624"; // il tuo ORCID iD
+  var container = document.getElementById("orcid-works");
+  var statusEl = document.getElementById("orcid-status");
 
-<!-- New style rendering if publication categories are defined -->
-{% if site.publication_category %}
-  {% for category in site.publication_category  %}
-    {% assign title_shown = false %}
-    {% for post in site.publications reversed %}
-      {% if post.category != category[0] %}
-        {% continue %}
-      {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
-      {% include archive-single.html %}
-    {% endfor %}
-  {% endfor %}
-{% else %}
-  {% for post in site.publications reversed %}
-    {% include archive-single.html %}
-  {% endfor %}
-{% endif %}
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c];
+    });
+  }
 
+  fetch("https://pub.orcid.org/v3.0/" + ORCID + "/works", {
+    headers: { "Accept": "application/json" }
+  })
+  .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function (data) {
+    var groups = (data && data.group) || [];
+    var items = groups.map(function (g) {
+      var w = g["work-summary"] && g["work-summary"][0];
+      if (!w) return null;
+      var title = (w.title && w.title.title) ? w.title.title.value : "(untitled)";
+      var journal = w["journal-title"] ? w["journal-title"].value : "";
+      var year = (w["publication-date"] && w["publication-date"].year) ? w["publication-date"].year.value : "";
+      var url = "";
+      var ids = (w["external-ids"] && w["external-ids"]["external-id"]) || [];
+      for (var i = 0; i < ids.length; i++) {
+        if (ids[i]["external-id-type"] === "doi") {
+          url = (ids[i]["external-id-url"] && ids[i]["external-id-url"].value) ||
+                ("https://doi.org/" + ids[i]["external-id-value"]);
+          break;
+        }
+      }
+      if (!url && w.url && w.url.value) url = w.url.value;
+      return { title: title, journal: journal, year: year ? parseInt(year, 10) : 0, url: url };
+    }).filter(Boolean);
+
+    items.sort(function (a, b) { return b.year - a.year; });
+
+    if (!items.length) { statusEl.textContent = "No public works found on ORCID yet."; return; }
+
+    var html = '<ol style="list-style:none;padding-left:0;">';
+    var currentYear = null;
+    items.forEach(function (it) {
+      if (it.year !== currentYear) {
+        currentYear = it.year;
+        html += '<li style="margin:1.2em 0 .3em;font-weight:700;">' + (it.year || "—") + '</li>';
+      }
+      html += '<li style="margin:.15em 0 .8em;line-height:1.45;">';
+      html += it.url
+        ? '<a href="' + it.url + '" target="_blank" rel="noopener"><strong>' + escapeHtml(it.title) + '</strong></a>'
+        : '<strong>' + escapeHtml(it.title) + '</strong>';
+      if (it.journal) html += '<br><em>' + escapeHtml(it.journal) + '</em>';
+      html += '</li>';
+    });
+    html += '</ol>';
+    container.innerHTML = html;
+  })
+  .catch(function () {
+    statusEl.innerHTML = 'Publications are available on my ' +
+      '<a href="https://orcid.org/' + ORCID + '" target="
 
 
