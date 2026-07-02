@@ -9,37 +9,25 @@ redirect_from:
 
 {% include base_path %}
 
+**Page in progress**
+
 Education
 ======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
+* Ph.D in Epidemiology, Maastricht University (Netherlands) 2024
+* M.Sc. in Biostatistics, Università degli Studi di Milano-Bicocca (Italy), 2020
+* M.Sc. in Communication, Management and Health, Università della Svizzera italiana (Switzerland), 2017
+* M.Sc. in Business Administration, VirginiaTech (United States), 2016
+* B.S. in Pharmaceutical Biotechnology, Università degli Studi di Milano (Italy), 2015
 
 Work experience
 ======
-* Spring 2024: Academic Pages Collaborator
-  * GitHub University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+* Since May 2026: External Consultant at JRC, European Commission
 
-* Fall 2015: Research Assistant
-  * GitHub University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+* Since May 2025: Postdoctoral Fellow at NYU Langone Health
 
-* Summer 2015: Research Assistant
-  * GitHub University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
-  
-Skills
-======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+
+
+
 
 Publications
 ======
@@ -53,12 +41,6 @@ Talks
     {% include archive-single-talk-cv.html  %}
   {% endfor %}</ul>
   
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+
   
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+
