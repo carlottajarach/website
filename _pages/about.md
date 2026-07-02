@@ -15,4 +15,4 @@ Over the past decade my work has followed three threads: the epidemiology of **t
 
 You'll find my publications, talks and CV in the menu above. Feel free to [get in touch](mailto:carlottajarach@hotmail.it).
 
-_Note: the website is currently under development_
+Note: the website is currently under development
