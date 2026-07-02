@@ -24,13 +24,13 @@ repository               : "academicpages/academicpages.github.io"
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Your Sidebar Name"
+  name             : "Postdoctoral researcher"
   pronouns         : # example: "she/her"  
-  bio              : "Short biography for the left-hand sidebar"
-  location         : "Earth"
-  employer         : "Red Brick University"
+  bio              : "Epidemiologist trying to understand what shapes our health as we get older, and why the experience is so unequal. I work at the intersection of research and health policy, with the conviction that good science should inform better decisions."
+  location         : "New York, USA"
+  employer         : "New York University Langone Health"
   uri              : # URL
-  email            : "none@example.org" 
+  email            : "carlottajarach@hotmail.it" 
 
   # Academic websites
   academia         : # URL
@@ -51,7 +51,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "academicpages"
+  github           : "carlottajarach"
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
