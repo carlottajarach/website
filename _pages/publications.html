@@ -4,7 +4,6 @@ title: "Publications"
 permalink: /publications/
 author_profile: true
 ---
-
 <style>
   .orcid-pubs { margin-top: 1em; }
   .orcid-pubs .oy-year { font-size: 1.15rem; font-weight: 700; margin: 1.5em 0 .4em; padding-bottom: .2em; border-bottom: 2px solid #e5e5e5; }
@@ -65,16 +64,16 @@ author_profile: true
 
     var byYear = {};
     items.forEach(function(it){ var y = it.year || 0; (byYear[y] = byYear[y] || []).push(it); });
-    var years = Object.keys(byYear).map(Number).sort(function(a,b){ return b - a; }); // dal più recente
+    var years = Object.keys(byYear).map(Number).sort(function(a,b){ return b - a; });
 
     var html = "";
     years.forEach(function(y, idx){
       var list = byYear[y];
       var label = y ? y : "Undated";
-      if (idx === 0) { // anno più recente: sempre aperto, per intero
+      if (idx === 0) {
         html += '<h2 class="oy-year">' + label + ' <span class="oy-count">· ' + list.length + '</span></h2>';
         html += renderList(list);
-      } else {         // anni precedenti: menù a tendina
+      } else {
         html += '<details class="oy-details"><summary class="oy-summary">' +
                 '<span class="oy-chev">▸</span><span>' + label + '</span>' +
                 '<span class="oy-count">' + list.length + ' publication' + (list.length>1?'s':'') + '</span></summary>' +
