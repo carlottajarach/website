@@ -5,8 +5,6 @@ permalink: /publications/
 author_profile: true
 ---
 
-<p style="font-family:monospace;font-size:.8em;color:#0a7;">✓ build ORCID-v3</p>
-
 <div id="orcid-works" style="margin-top:1em;">
   <p id="orcid-status" style="color:#777;">Loading publications from ORCID…</p>
 </div>
@@ -17,7 +15,7 @@ author_profile: true
   var statusEl = document.getElementById("orcid-status");
   var container = document.getElementById("orcid-works");
 
-  if (statusEl) statusEl.textContent = "Contacting ORCID… (script attivo)";
+  if (statusEl) statusEl.textContent = "Contacting ORCID…";
 
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];});}
   function fail(m){ if(statusEl) statusEl.innerHTML='<span style="color:#b00;">'+esc(m)+'</span>'; }
