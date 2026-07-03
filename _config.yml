@@ -23,7 +23,7 @@ repository               : ""
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "https://github.com/carlottajarach.png"
   name             : "Carlotta Micaela Jarach"
   pronouns         : # example: "she/her"  
   bio              : "Epidemiologist trying to understand what shapes our health as we get older"
