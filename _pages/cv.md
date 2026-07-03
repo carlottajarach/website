@@ -13,7 +13,7 @@ redirect_from:
 
 Education
 ======
-* Ph.D in Epidemiology, Maastricht University (NL) 2024
+* Ph.D. in Epidemiology, Maastricht University (NL) 2024
 * M.Sc. in Biostatistics, Università degli Studi di Milano-Bicocca (IT), 2020
 * M.Sc. in Health Communication, Università della Svizzera italiana (CH), 2017
 * M.Sc. in Business Administration, VirginiaTech (USA), 2016
