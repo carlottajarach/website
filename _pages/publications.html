@@ -5,6 +5,8 @@ permalink: /publications/
 author_profile: true
 ---
 
+<p style="font-family:monospace;font-size:.8em;color:#0a7;">✓ build ORCID-v3</p>
+
 <div id="orcid-works" style="margin-top:1em;">
   <p id="orcid-status" style="color:#777;">Loading publications from ORCID…</p>
 </div>
@@ -15,10 +17,10 @@ author_profile: true
   var statusEl = document.getElementById("orcid-status");
   var container = document.getElementById("orcid-works");
 
-  statusEl.textContent = "Contacting ORCID…"; // prova che lo script parte
+  if (statusEl) statusEl.textContent = "Contacting ORCID… (script attivo)";
 
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];});}
-  function fail(msg){ statusEl.innerHTML = '<span style="color:#b00;">'+esc(msg)+'</span>'; }
+  function fail(m){ if(statusEl) statusEl.innerHTML='<span style="color:#b00;">'+esc(m)+'</span>'; }
 
   try {
     var ctrl = new AbortController();
@@ -47,15 +49,14 @@ author_profile: true
         if(it.journal) html+='<br><em>'+esc(it.journal)+'</em>';
         html+='</li>';
       });
-      html+='</ol>'; container.innerHTML = html;
+      html+='</ol>'; if(container) container.innerHTML = html;
     })
     .catch(function (e) {
       clearTimeout(timer);
       if (e && e.name === "AbortError") fail("Timeout: ORCID non ha risposto in 10s.");
       else fail("Errore nel contattare ORCID — " + (e && e.message ? e.message : "sconosciuto") + ".");
     });
-  } catch (e) {
-    fail("Errore nello script prima di contattare ORCID: " + (e && e.message ? e.message : e));
-  }
+  } catch (e) { fail("Errore nello script: " + (e && e.message ? e.message : e)); }
 })();
 </script>
+
