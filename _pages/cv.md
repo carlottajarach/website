@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-**Page in progress**
+**Note: Page in progress**
 
 Education
 ======
