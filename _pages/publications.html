@@ -11,64 +11,51 @@ author_profile: true
 
 <script>
 (function () {
-  var ORCID = "0000-0002-9963-1624"; // il tuo ORCID iD
-  var container = document.getElementById("orcid-works");
+  var ORCID = "0000-0002-9963-1624";
   var statusEl = document.getElementById("orcid-status");
+  var container = document.getElementById("orcid-works");
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c];
+  statusEl.textContent = "Contacting ORCID…"; // prova che lo script parte
+
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];});}
+  function fail(msg){ statusEl.innerHTML = '<span style="color:#b00;">'+esc(msg)+'</span>'; }
+
+  try {
+    var ctrl = new AbortController();
+    var timer = setTimeout(function(){ ctrl.abort(); }, 10000);
+    fetch("https://pub.orcid.org/v3.0/" + ORCID + "/works", { headers:{ "Accept":"application/json" }, signal: ctrl.signal })
+    .then(function (r) { clearTimeout(timer); if (!r.ok) throw new Error("ORCID status " + r.status); return r.json(); })
+    .then(function (data) {
+      var groups = (data && data.group) || [];
+      if (!groups.length) { fail("Collegato a ORCID, ma 0 lavori PUBBLICI. Su orcid.org metti i Works su 'Everyone'."); return; }
+      var items = groups.map(function (g) {
+        var w = g["work-summary"] && g["work-summary"][0]; if (!w) return null;
+        var title = (w.title && w.title.title) ? w.title.title.value : "(untitled)";
+        var journal = w["journal-title"] ? w["journal-title"].value : "";
+        var year = (w["publication-date"] && w["publication-date"].year) ? w["publication-date"].year.value : "";
+        var url = ""; var ids = (w["external-ids"] && w["external-ids"]["external-id"]) || [];
+        for (var i=0;i<ids.length;i++){ if (ids[i]["external-id-type"]==="doi"){ url=(ids[i]["external-id-url"]&&ids[i]["external-id-url"].value)||("https://doi.org/"+ids[i]["external-id-value"]); break; } }
+        if (!url && w.url && w.url.value) url = w.url.value;
+        return { title:title, journal:journal, year: year?parseInt(year,10):0, url:url };
+      }).filter(Boolean);
+      items.sort(function(a,b){return b.year-a.year;});
+      var html = '<ol style="list-style:none;padding-left:0;">'; var cy=null;
+      items.forEach(function(it){
+        if(it.year!==cy){cy=it.year; html+='<li style="margin:1.2em 0 .3em;font-weight:700;">'+(it.year||"—")+'</li>';}
+        html+='<li style="margin:.15em 0 .8em;line-height:1.45;">';
+        html+= it.url ? '<a href="'+it.url+'" target="_blank" rel="noopener"><strong>'+esc(it.title)+'</strong></a>' : '<strong>'+esc(it.title)+'</strong>';
+        if(it.journal) html+='<br><em>'+esc(it.journal)+'</em>';
+        html+='</li>';
+      });
+      html+='</ol>'; container.innerHTML = html;
+    })
+    .catch(function (e) {
+      clearTimeout(timer);
+      if (e && e.name === "AbortError") fail("Timeout: ORCID non ha risposto in 10s.");
+      else fail("Errore nel contattare ORCID — " + (e && e.message ? e.message : "sconosciuto") + ".");
     });
+  } catch (e) {
+    fail("Errore nello script prima di contattare ORCID: " + (e && e.message ? e.message : e));
   }
-
-  fetch("https://pub.orcid.org/v3.0/" + ORCID + "/works", {
-    headers: { "Accept": "application/json" }
-  })
-  .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(function (data) {
-    var groups = (data && data.group) || [];
-    var items = groups.map(function (g) {
-      var w = g["work-summary"] && g["work-summary"][0];
-      if (!w) return null;
-      var title = (w.title && w.title.title) ? w.title.title.value : "(untitled)";
-      var journal = w["journal-title"] ? w["journal-title"].value : "";
-      var year = (w["publication-date"] && w["publication-date"].year) ? w["publication-date"].year.value : "";
-      var url = "";
-      var ids = (w["external-ids"] && w["external-ids"]["external-id"]) || [];
-      for (var i = 0; i < ids.length; i++) {
-        if (ids[i]["external-id-type"] === "doi") {
-          url = (ids[i]["external-id-url"] && ids[i]["external-id-url"].value) ||
-                ("https://doi.org/" + ids[i]["external-id-value"]);
-          break;
-        }
-      }
-      if (!url && w.url && w.url.value) url = w.url.value;
-      return { title: title, journal: journal, year: year ? parseInt(year, 10) : 0, url: url };
-    }).filter(Boolean);
-
-    items.sort(function (a, b) { return b.year - a.year; });
-
-    if (!items.length) { statusEl.textContent = "No public works found on ORCID yet."; return; }
-
-    var html = '<ol style="list-style:none;padding-left:0;">';
-    var currentYear = null;
-    items.forEach(function (it) {
-      if (it.year !== currentYear) {
-        currentYear = it.year;
-        html += '<li style="margin:1.2em 0 .3em;font-weight:700;">' + (it.year || "—") + '</li>';
-      }
-      html += '<li style="margin:.15em 0 .8em;line-height:1.45;">';
-      html += it.url
-        ? '<a href="' + it.url + '" target="_blank" rel="noopener"><strong>' + escapeHtml(it.title) + '</strong></a>'
-        : '<strong>' + escapeHtml(it.title) + '</strong>';
-      if (it.journal) html += '<br><em>' + escapeHtml(it.journal) + '</em>';
-      html += '</li>';
-    });
-    html += '</ol>';
-    container.innerHTML = html;
-  })
-  .catch(function () {
-    statusEl.innerHTML = 'Publications are available on my ' +
-      '<a href="https://orcid.org/' + ORCID + '" target="
-
-
+})();
+</script>
